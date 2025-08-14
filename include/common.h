@@ -7,6 +7,9 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <exception>
+#include <stdexcept>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
