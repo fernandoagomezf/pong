@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug LabyrinthGame",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/debug/labyrinthgame.exe",
+            "args":[],
+            "stopAtEntry": false, 
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console":"externalTerminal"
+        }
+
+    ]
+}
