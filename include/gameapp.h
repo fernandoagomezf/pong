@@ -1,11 +1,9 @@
 #pragma once
 
-struct SDL_Window;
-struct SDL_Renderer;
-
 namespace game {
     class Paddle;
     class Ball;
+    class Scene;
 
     class GameApp {
         public:
@@ -20,8 +18,7 @@ namespace game {
             void render();
             
         private:
-            SDL_Window* _window;
-            SDL_Renderer* _renderer;
+            Scene* _scene;
             Ball* _ball;
             Paddle* _playerPaddle;
             Paddle* _machinePaddle;

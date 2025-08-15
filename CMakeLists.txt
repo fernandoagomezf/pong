@@ -26,12 +26,17 @@ endif()
 
 message(STATUS "SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
 message(STATUS "SDL2_LIBRARIES: ${SDL2_LIBRARIES}")
-
+ 
 add_executable(PongGame
     src/main.cpp 
     src/gameapp.cpp
     src/ball.cpp
     src/paddle.cpp
+    src/color.cpp
+    src/scene.cpp
+    src/sceneitem.cpp
+    src/point.cpp 
+    src/dimension.cpp
 )
 
 target_include_directories(PongGame PRIVATE

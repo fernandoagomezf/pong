@@ -1,23 +1,22 @@
 #pragma once
 
-struct SDL_Rect;
-struct SDL_Renderer;
+#include "sceneitem.h"
 
 namespace game {
-    class Paddle {
-        public:
-            Paddle(SDL_Renderer* renderer, int x, int y);
-            ~Paddle();
+    class Scene;
+    class SceneItem;
 
-            void update();
-            void render();
+    class Paddle : public SceneItem {
+        public:
+            Paddle();
+            virtual ~Paddle();
+
+            virtual void update(long delta);
+            virtual void render(Scene* scene);
             void moveUp();
             void moveDown();
-            SDL_Rect getRect() const;
 
         private:
-            SDL_Renderer* _renderer;
-            SDL_Rect _rect;
             int _speed;
     };
 }

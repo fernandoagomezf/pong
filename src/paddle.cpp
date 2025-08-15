@@ -1,45 +1,63 @@
 #include "common.h"
 #include "paddle.h"
+#include "point.h"
+#include "dimension.h"
+#include "scene.h"
+#include "sceneitem.h"
 
 using std::invalid_argument;
 using game::Paddle;
+using game::Dimension;
+using game::Point;
 
-Paddle::Paddle(SDL_Renderer* renderer, int x, int y) {
-    if (renderer == nullptr) {
-        throw invalid_argument("Renderer cannot be null.");
-    }
-
-    _renderer = renderer;
+Paddle::Paddle() {
     _speed = 5;
-    _rect = { x, y, 20, 100 };
+    Dimension dim(20, 100);
+    resize(dim);
 }
 
 Paddle::~Paddle() {
     
 }
 
-SDL_Rect Paddle::getRect() const {
-    return _rect;
+void Paddle::update(long delta) {
+    SceneItem::update(delta);
+
+    auto pt = point();
+    auto dim = dimension();
+    auto newx = pt.x();
+    auto newy = pt.y();
+
+    if (newy < 0) { 
+        newy = 0;
+    }
+    if (newy > 600 - dim.height()) {
+        newy = 600 - dim.height();
+    }
+    Point newpt(newx, newy);
+    moveTo(newpt);
 }
 
-void Paddle::update() {
-    if (_rect.y < 0) { 
-        _rect.y = 0;
-    }
-    if (_rect.y > 600 - _rect.h) {
-        _rect.y = 600 - _rect.h;
-    }
-}
-
-void Paddle::render() {
-    SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(_renderer, &_rect);
+void Paddle::render(Scene* scene) {
+    SceneItem::render(scene);
+    
+    auto pt = point();
+    auto dim = dimension();
+    scene->drawZone(pt, dim, Color::white());
 }
 
 void Paddle::moveUp() {
-    _rect.y -= _speed;    
+    auto pt = point();
+    auto newx = pt.x();
+    auto newy = pt.y() - _speed;    
+    Point newpt(newx, newy);
+    moveTo(newpt);
 }
 
 void Paddle::moveDown() {
-    _rect.y += _speed;
+    auto pt = point();
+    auto newx = pt.x();
+    auto newy = pt.y() + _speed;    
+    Point newpt(newx, newy);
+    moveTo(newpt);
 }

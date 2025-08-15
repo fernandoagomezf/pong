@@ -3,38 +3,46 @@
 #include "gameapp.h"
 #include "ball.h"
 #include "paddle.h"
+#include "scene.h"
 
 using std::runtime_error;
 using std::string;
 using game::GameApp;
+using game::Point;
+using game::Dimension;
+using game::Scene;
 
 GameApp::GameApp() {
     SDL_Init(SDL_INIT_VIDEO);
-    _window = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+    _scene = new Scene();    
     _isRunning = true;
 
-    _playerPaddle = new Paddle(_renderer, 50, 250);
-    _machinePaddle = new Paddle(_renderer, 750, 250);
-    _ball = new Ball(_renderer, 400, 300);
+    Point playerPaddlePt(50, 250);
+    Point machinePaddlePt(750, 250);
+    _playerPaddle = new Paddle();
+    _playerPaddle->moveTo(playerPaddlePt);
+    _machinePaddle = new Paddle();
+    _machinePaddle->moveTo(machinePaddlePt);
+    _ball = new Ball();
+    _ball->reset();
 }
 
 GameApp::~GameApp() {
     delete _playerPaddle;
     delete _machinePaddle;
     delete _ball;
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
     SDL_Quit();
 }
 
 void GameApp::run() {
+    _scene->load();
     while (_isRunning) {
         handleEvents();
         update();
         render();
         SDL_Delay(16);  // ~60 FPS
     }
+    _scene->unload();
 }
 
 void GameApp::handleEvents() {
@@ -55,32 +63,58 @@ void GameApp::handleEvents() {
 }
 
 void GameApp::update() {
-    _ball->update();
-    _playerPaddle->update();
-    _machinePaddle->update();
+    _ball->update(0);
+    _playerPaddle->update(0);
+    _machinePaddle->update(0);
 
-    if (_machinePaddle->getRect().y + _machinePaddle->getRect().h / 2 < _ball->getRect().y) {
+    auto ballPt = _ball->point();
+    auto ballDim = _ball->dimension();
+    auto machinePaddlePt = _machinePaddle->point();
+    auto machinePaddleDim = _machinePaddle->dimension();
+    auto playerPaddlePt = _playerPaddle->point();
+    auto playerPaddleDim = _playerPaddle->dimension();
+    
+    SDL_Rect ballRect = { 
+        ballPt.x(), 
+        ballPt.y(), 
+        ballDim.width(), 
+        ballDim.height() 
+    };
+    SDL_Rect machineRect = {
+        machinePaddlePt.x(), 
+        machinePaddlePt.y(), 
+        machinePaddleDim.width(), 
+        machinePaddleDim.height()
+    };
+    SDL_Rect playerRect = {
+        playerPaddlePt.x(), 
+        playerPaddlePt.y(), 
+        playerPaddleDim.width(),
+        playerPaddleDim.height()
+    };
+
+    if (machineRect.y + machineRect.h / 2 < ballPt.y()) {
         _machinePaddle->moveDown();
     } else {
         _machinePaddle->moveUp();
     }
 
-    if (SDL_HasIntersection(&_ball->getRect(), &_playerPaddle->getRect()) ||
-        SDL_HasIntersection(&_ball->getRect(), &_machinePaddle->getRect())) {
+
+    if (SDL_HasIntersection(&ballRect, &playerRect) ||
+        SDL_HasIntersection(&ballRect, &machineRect)) {
         _ball->reverseX();
     }
-    if (_ball->getRect().x < 0 || _ball->getRect().x > 800) {
+    if (ballPt.x() < 0 || ballPt.x() > 800) {
         _ball->reset();
     }
 }
 
 void GameApp::render() {
-    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255); 
-    SDL_RenderClear(_renderer);
+    _scene->clear();
 
-    _playerPaddle->render();
-    _machinePaddle->render();
-    _ball->render();
+    _playerPaddle->render(_scene);
+    _machinePaddle->render(_scene);
+    _ball->render(_scene);
 
-    SDL_RenderPresent(_renderer);
+    _scene->show();
 }

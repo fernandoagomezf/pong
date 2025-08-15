@@ -1,20 +1,19 @@
 
 #include "common.h"
 #include "ball.h"
+#include "scene.h"
+#include "sceneitem.h"
 
 using std::invalid_argument;
 using game::Ball;
+using game::Scene;
 
-Ball::Ball(SDL_Renderer* renderer, int x, int y) {
-    if (renderer == nullptr) {
-        throw invalid_argument("Renderer cannot be null.");
-    }
-
-    _renderer = renderer;
+Ball::Ball()
+    : SceneItem() {    
     _velX = 3;
     _velY = 3;
-    _rect = {x, y, 15, 15}; 
-
+    Dimension dim(15, 15);
+    resize(dim);
 }
 
 Ball::~Ball() {
@@ -25,25 +24,31 @@ void Ball::reverseX() {
     _velX *= -1;
 }
 
-SDL_Rect Ball::getRect() const {
-    return _rect;
-}
+void Ball::update(long delta) {
+    SceneItem::update(delta);
 
-void Ball::update() {
-    _rect.x += _velX;
-    _rect.y += _velY;
-    if (_rect.y < 0 || _rect.y > 600 - _rect.h) {
+    auto pt = point();
+    auto dim = dimension();
+    auto xpt = pt.x() + _velX;
+    auto ypt = pt.y() + _velY;
+
+    Point newpt(xpt, ypt);
+    moveTo(newpt);
+    
+    if (newpt.y() < 0 || newpt.y() > 600 - dim.height()) {
         _velY *= -1;
     }
 }
 
-void Ball::render() {
-    SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(_renderer, &_rect);
+void Ball::render(Scene* scene) {
+    SceneItem::render(scene);
+    auto pt = point();
+    auto dim = dimension();
+    scene->drawZone(pt, dim, Color::white());
 }
 
 void Ball::reset() {
-    _rect.x = 400;
-    _rect.y = 300;
+    Point opt(400, 300);
+    moveTo(opt);
     _velX *= -1;
 }

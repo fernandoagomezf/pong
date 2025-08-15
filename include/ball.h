@@ -1,23 +1,23 @@
 #pragma once
 
-struct SDL_Renderer;
-struct SDL_Rect;
+#include "sceneitem.h"
 
-namespace game {
-    class Ball {
+namespace game {    
+    class Scene;
+    class SceneItem;
+
+    class Ball : public SceneItem {
         public:
-            Ball(SDL_Renderer* renderer, int x, int y);
-            ~Ball();
+            Ball();
+            virtual ~Ball();
 
-            void update();
-            void render();
+            virtual void update(long delta);
+            virtual void render(Scene* scene);
+
             void reset();
-            void reverseX();
-            SDL_Rect getRect() const;
+            void reverseX();            
 
         private:
-            SDL_Renderer* _renderer;
-            SDL_Rect _rect;
             int _velX;
             int _velY;
     };
