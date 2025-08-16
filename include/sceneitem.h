@@ -2,13 +2,17 @@
 
 #include "point.h"
 #include "dimension.h"
+#include "updatable.h"
+#include "renderable.h"
 
 namespace game {
     class Point;
     class Dimension;
     class Scene;
+    class Updatable;
+    class Renderable;
 
-    class SceneItem {
+    class SceneItem : public Updatable, public Renderable {
         public:
             virtual ~SceneItem();
 

@@ -4,6 +4,7 @@
 #include "ball.h"
 #include "paddle.h"
 #include "scene.h"
+#include "courtscene.h"
 
 using std::runtime_error;
 using std::string;
@@ -11,10 +12,11 @@ using game::GameApp;
 using game::Point;
 using game::Dimension;
 using game::Scene;
+using game::CourtScene;
 
 GameApp::GameApp() {
     SDL_Init(SDL_INIT_VIDEO);
-    _scene = new Scene();    
+    _scene = new CourtScene();    
     _isRunning = true;
 
     Point playerPaddlePt(50, 250);
@@ -35,12 +37,20 @@ GameApp::~GameApp() {
 }
 
 void GameApp::run() {
+    uint32_t lastTicks = 0;
+
+
     _scene->load();
     while (_isRunning) {
+        auto currentTicks = SDL_GetTicks();
+        auto delta = currentTicks - lastTicks;
+        lastTicks = currentTicks;
+
         handleEvents();
-        update();
-        render();
-        SDL_Delay(16);  // ~60 FPS
+        _scene->update(delta);
+        _scene->render(); 
+
+        SDL_Delay(16);
     }
     _scene->unload();
 }
@@ -60,61 +70,4 @@ void GameApp::handleEvents() {
     if (keys[SDL_SCANCODE_DOWN]) { 
         _playerPaddle->moveDown();
     }
-}
-
-void GameApp::update() {
-    _ball->update(0);
-    _playerPaddle->update(0);
-    _machinePaddle->update(0);
-
-    auto ballPt = _ball->point();
-    auto ballDim = _ball->dimension();
-    auto machinePaddlePt = _machinePaddle->point();
-    auto machinePaddleDim = _machinePaddle->dimension();
-    auto playerPaddlePt = _playerPaddle->point();
-    auto playerPaddleDim = _playerPaddle->dimension();
-    
-    SDL_Rect ballRect = { 
-        ballPt.x(), 
-        ballPt.y(), 
-        ballDim.width(), 
-        ballDim.height() 
-    };
-    SDL_Rect machineRect = {
-        machinePaddlePt.x(), 
-        machinePaddlePt.y(), 
-        machinePaddleDim.width(), 
-        machinePaddleDim.height()
-    };
-    SDL_Rect playerRect = {
-        playerPaddlePt.x(), 
-        playerPaddlePt.y(), 
-        playerPaddleDim.width(),
-        playerPaddleDim.height()
-    };
-
-    if (machineRect.y + machineRect.h / 2 < ballPt.y()) {
-        _machinePaddle->moveDown();
-    } else {
-        _machinePaddle->moveUp();
-    }
-
-
-    if (SDL_HasIntersection(&ballRect, &playerRect) ||
-        SDL_HasIntersection(&ballRect, &machineRect)) {
-        _ball->reverseX();
-    }
-    if (ballPt.x() < 0 || ballPt.x() > 800) {
-        _ball->reset();
-    }
-}
-
-void GameApp::render() {
-    _scene->clear();
-
-    _playerPaddle->render(_scene);
-    _machinePaddle->render(_scene);
-    _ball->render(_scene);
-
-    _scene->show();
 }

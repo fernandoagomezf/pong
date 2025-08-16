@@ -1,7 +1,9 @@
 
 #include "common.h"
 #include "scene.h"
+#include "sceneitem.h"
 
+using std::find;
 using game::Scene;
 
 Scene::Scene()
@@ -17,7 +19,10 @@ Scene::Scene(SDL_Window* window, SDL_Renderer* renderer)
 }
 
 Scene::~Scene() {
-
+    for (auto item : _items)     {
+        delete item;
+    }
+    _items.clear();
 }
 
 void Scene::load() {
@@ -29,9 +34,27 @@ void Scene::load() {
     if (_renderer == nullptr) {
         _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     }
+
+    loadItems();
+}
+
+void Scene::attach(SceneItem* item) {
+    auto i = find(_items.begin(), _items.end(), item);
+    if (i == _items.end()) {
+        _items.push_back(item);
+    }
+}
+
+void Scene::detach(SceneItem* item) {
+    auto i = find(_items.begin(), _items.end(), item);
+    if (i != _items.end()) {
+        _items.erase(i);
+    }
 }
 
 void Scene::unload() {
+    unloadItems();
+
     if (_renderer != nullptr) {
         SDL_DestroyRenderer(_renderer);
         _renderer = nullptr;
@@ -42,7 +65,7 @@ void Scene::unload() {
     }
 }
 
-void Scene::drawZone(const Point& pt, const Dimension& dim, const Color& color) {    
+void Scene::draw(const Point& pt, const Dimension& dim, const Color& color) {    
     SDL_Rect rect = { 
         pt.x(), pt.y(), dim.width(), dim.height()
     };
@@ -50,11 +73,19 @@ void Scene::drawZone(const Point& pt, const Dimension& dim, const Color& color) 
     SDL_RenderFillRect(_renderer, &rect);
 }
 
-void Scene::clear() {
-    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255); 
-    SDL_RenderClear(_renderer);
+void Scene::update(long delta) {
+    for (auto i : _items) {
+        i->update(delta);
+    }
 }
 
-void Scene::show() {
+void Scene::render(){
+    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255); 
+    SDL_RenderClear(_renderer);
+
+    for (auto i : _items) {
+        i->render(this);
+    }
+
     SDL_RenderPresent(_renderer);
 }

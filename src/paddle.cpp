@@ -43,7 +43,7 @@ void Paddle::render(Scene* scene) {
     
     auto pt = point();
     auto dim = dimension();
-    scene->drawZone(pt, dim, Color::white());
+    scene->draw(pt, dim, Color::white());
 }
 
 void Paddle::moveUp() {

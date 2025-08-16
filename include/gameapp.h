@@ -14,8 +14,6 @@ namespace game {
             
         protected:
             void handleEvents();
-            void update();
-            void render();
             
         private:
             Scene* _scene;

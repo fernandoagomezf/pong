@@ -3,9 +3,6 @@
 #include "sceneitem.h"
 
 namespace game {    
-    class Scene;
-    class SceneItem;
-
     class Ball : public SceneItem {
         public:
             Ball();

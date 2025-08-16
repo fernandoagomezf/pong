@@ -44,7 +44,7 @@ void Ball::render(Scene* scene) {
     SceneItem::render(scene);
     auto pt = point();
     auto dim = dimension();
-    scene->drawZone(pt, dim, Color::white());
+    scene->draw(pt, dim, Color::white());
 }
 
 void Ball::reset() {
