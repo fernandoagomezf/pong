@@ -5,19 +5,17 @@
 #include "point.h"
 #include "dimension.h"
 #include "updatable.h"
-
-struct SDL_Window;
-struct SDL_Renderer;
+#include "sceneitem.h"
+#include "inputhandler.h"
 
 namespace game {
     using std::vector;
-    
-    class SceneItem;
+    using game::EventBus;
 
-    class Scene : Updatable {
+    class Scene : public Updatable {
         public:
-            Scene();
-            Scene(SDL_Window* window, SDL_Renderer* renderer);
+            Scene(EventBus* bus);
+            Scene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer);
             virtual ~Scene();
 
             void load();
@@ -33,10 +31,13 @@ namespace game {
             virtual void loadItems() = 0;
             virtual void unloadItems() = 0;
 
+            EventBus* getBus() const;
+
         private:
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             Dimension _dimension;
             vector<SceneItem*> _items;
+            EventBus* _bus;
     };
 }

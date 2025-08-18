@@ -2,20 +2,34 @@
 #include "common.h"
 #include "scene.h"
 #include "sceneitem.h"
+#include "event.h"
+#include "eventbus.h"
 
 using std::find;
+using std::invalid_argument;
+using game::InputHandler;
 using game::Scene;
+using game::Event;
+using game::EventBus;
 
-Scene::Scene()
+Scene::Scene(EventBus* bus)
     : _dimension(800, 600) {
     _window = nullptr;
     _renderer = nullptr;
+    if (bus == nullptr) {
+        throw invalid_argument("An event bus is needed for the scene.");
+    }
+    _bus = bus;
 }
 
-Scene::Scene(SDL_Window* window, SDL_Renderer* renderer)
+Scene::Scene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer)
     : _dimension(800, 600) {
     _window = window;
     _renderer = renderer;
+    if (bus == nullptr) {
+        throw invalid_argument("An event bus is needed for the scene.");
+    }
+    _bus = bus;
 }
 
 Scene::~Scene() {
@@ -34,7 +48,6 @@ void Scene::load() {
     if (_renderer == nullptr) {
         _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     }
-
     loadItems();
 }
 
@@ -88,4 +101,8 @@ void Scene::render(){
     }
 
     SDL_RenderPresent(_renderer);
+}
+
+EventBus* Scene::getBus() const {
+    return _bus;
 }

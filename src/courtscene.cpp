@@ -5,15 +5,15 @@
 using game::Scene;
 using game::CourtScene;
 
-CourtScene::CourtScene()
-    : Scene() {
+CourtScene::CourtScene(EventBus* bus)
+    : Scene(bus) {
     _ball = new Ball();
     _playerPaddle = new Paddle();
     _machinePaddle = new Paddle();
 }
 
-CourtScene::CourtScene(SDL_Window* window, SDL_Renderer* renderer)
-    : Scene(window, renderer) {
+CourtScene::CourtScene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer)
+    : Scene(bus, window, renderer) {
     _ball = new Ball();
     _playerPaddle = new Paddle();
     _machinePaddle = new Paddle();
@@ -36,9 +36,20 @@ void CourtScene::loadItems() {
     Point machinePaddlePt(750, 250);
     _machinePaddle->moveTo(machinePaddlePt);
     attach(_machinePaddle);
+
+    auto bus = getBus();
+    bus->subscribe(Event::PADDLE_UP, [this]() {
+        _playerPaddle->moveUp();
+    });
+    bus->subscribe(Event::PADDLE_DOWN, [this]() {
+        _playerPaddle->moveDown();
+    });
 }
 
 void CourtScene::unloadItems() {
+    auto bus = getBus();
+    bus->clear(Event::PADDLE_UP);
+    bus->clear(Event::PADDLE_DOWN);
     detach(_ball);
     detach(_playerPaddle);
     detach(_machinePaddle);

@@ -1,9 +1,9 @@
 #pragma once
 
 namespace game {
-    class Paddle;
-    class Ball;
     class Scene;
+    class InputHandler;
+    class EventBus;
 
     class GameApp {
         public:
@@ -17,9 +17,8 @@ namespace game {
             
         private:
             Scene* _scene;
-            Ball* _ball;
-            Paddle* _playerPaddle;
-            Paddle* _machinePaddle;
+            EventBus* _bus;
+            InputHandler* _handler;
             bool _isRunning;
     };
 }

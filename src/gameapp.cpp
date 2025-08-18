@@ -5,6 +5,8 @@
 #include "paddle.h"
 #include "scene.h"
 #include "courtscene.h"
+#include "eventbus.h"
+#include "inputhandler.h"
 
 using std::runtime_error;
 using std::string;
@@ -13,32 +15,26 @@ using game::Point;
 using game::Dimension;
 using game::Scene;
 using game::CourtScene;
+using game::InputHandler;
+using game::EventBus;
 
 GameApp::GameApp() {
     SDL_Init(SDL_INIT_VIDEO);
-    _scene = new CourtScene();    
+    _bus = new EventBus();
+    _handler = new InputHandler(_bus);
+    _scene = new CourtScene(_bus);    
     _isRunning = true;
-
-    Point playerPaddlePt(50, 250);
-    Point machinePaddlePt(750, 250);
-    _playerPaddle = new Paddle();
-    _playerPaddle->moveTo(playerPaddlePt);
-    _machinePaddle = new Paddle();
-    _machinePaddle->moveTo(machinePaddlePt);
-    _ball = new Ball();
-    _ball->reset();
 }
 
 GameApp::~GameApp() {
-    delete _playerPaddle;
-    delete _machinePaddle;
-    delete _ball;
+    delete _scene;
+    delete _handler;
+    delete _bus;
     SDL_Quit();
 }
 
 void GameApp::run() {
     uint32_t lastTicks = 0;
-
 
     _scene->load();
     while (_isRunning) {
@@ -60,14 +56,8 @@ void GameApp::handleEvents() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             _isRunning = false;
+        } else {
+            _handler->handle(event);
         }
-    }
-
-    const Uint8* keys = SDL_GetKeyboardState(nullptr);
-    if (keys[SDL_SCANCODE_UP]) {
-        _playerPaddle->moveUp();
-    }
-    if (keys[SDL_SCANCODE_DOWN]) { 
-        _playerPaddle->moveDown();
     }
 }

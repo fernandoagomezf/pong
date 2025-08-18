@@ -32,7 +32,10 @@ add_executable(PongGame
     src/color.cpp 
     src/courtscene.cpp
     src/dimension.cpp
+    src/event.cpp
+    src/eventbus.cpp
     src/gameapp.cpp
+    src/inputhandler.cpp
     src/main.cpp 
     src/paddle.cpp
     src/point.cpp 

@@ -9,11 +9,12 @@
 namespace game {
     using game::Ball;
     using game::Paddle;
+    using game::EventBus;
 
     class CourtScene : public Scene {
         public:
-            CourtScene();
-            CourtScene(SDL_Window* window, SDL_Renderer* renderer);
+            CourtScene(EventBus* bus);
+            CourtScene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer);
             virtual ~CourtScene();
 
             virtual void update(long delta);
