@@ -7,28 +7,19 @@
 
 using std::find;
 using std::invalid_argument;
-using game::InputHandler;
+using game::Renderer;
 using game::Scene;
 using game::Event;
 using game::EventBus;
 
-Scene::Scene(EventBus* bus)
-    : _dimension(800, 600) {
-    _window = nullptr;
-    _renderer = nullptr;
+Scene::Scene(Renderer* renderer, EventBus* bus) {
+    if (renderer == nullptr) {
+        throw invalid_argument("A renderer is needed for the scene.");
+    }
     if (bus == nullptr) {
         throw invalid_argument("An event bus is needed for the scene.");
     }
-    _bus = bus;
-}
-
-Scene::Scene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer)
-    : _dimension(800, 600) {
-    _window = window;
     _renderer = renderer;
-    if (bus == nullptr) {
-        throw invalid_argument("An event bus is needed for the scene.");
-    }
     _bus = bus;
 }
 
@@ -39,16 +30,20 @@ Scene::~Scene() {
     _items.clear();
 }
 
+Renderer* Scene::getRenderer() const {
+    return _renderer;
+}
+
+EventBus* Scene::getBus() const {
+    return _bus;
+}
+
 void Scene::load() {
-    if (_window == nullptr) {
-        auto width = _dimension.width();
-        auto height = _dimension.height();
-        _window = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
-    }
-    if (_renderer == nullptr) {
-        _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    }
-    loadItems();
+
+}
+
+void Scene::unload() {
+    
 }
 
 void Scene::attach(SceneItem* item) {
@@ -65,27 +60,6 @@ void Scene::detach(SceneItem* item) {
     }
 }
 
-void Scene::unload() {
-    unloadItems();
-
-    if (_renderer != nullptr) {
-        SDL_DestroyRenderer(_renderer);
-        _renderer = nullptr;
-    }
-    if (_window != nullptr) {
-        SDL_DestroyWindow(_window);
-        _window = nullptr;
-    }
-}
-
-void Scene::draw(const Point& pt, const Dimension& dim, const Color& color) {    
-    SDL_Rect rect = { 
-        pt.x(), pt.y(), dim.width(), dim.height()
-    };
-    SDL_SetRenderDrawColor(_renderer, color.r(), color.g(), color.b(), color.a());
-    SDL_RenderFillRect(_renderer, &rect);
-}
-
 void Scene::update(long delta) {
     for (auto i : _items) {
         i->update(delta);
@@ -93,16 +67,12 @@ void Scene::update(long delta) {
 }
 
 void Scene::render(){
-    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255); 
-    SDL_RenderClear(_renderer);
+    _renderer->clear();
 
     for (auto i : _items) {
-        i->render(this);
+        i->render(_renderer);
     }
 
-    SDL_RenderPresent(_renderer);
+    _renderer->show();
 }
 
-EventBus* Scene::getBus() const {
-    return _bus;
-}

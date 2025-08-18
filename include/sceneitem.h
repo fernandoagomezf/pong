@@ -4,13 +4,13 @@
 #include "dimension.h"
 #include "updatable.h"
 #include "renderable.h"
+#include "renderer.h"
 
 namespace game {
-    class Point;
-    class Dimension;
-    class Scene;
-    class Updatable;
-    class Renderable;
+    using game::Point;
+    using game::Dimension;
+    using game::Renderer;
+    using game::Renderable;
 
     class SceneItem : public Updatable, public Renderable {
         public:
@@ -22,7 +22,7 @@ namespace game {
             void moveTo(const Point& point);
             void resize(const Dimension& dimension);
             virtual void update(long delta);
-            virtual void render(Scene* scene);         
+            virtual void render(Renderer* renderer);         
 
         protected:
             SceneItem();

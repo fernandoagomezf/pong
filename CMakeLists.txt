@@ -39,6 +39,7 @@ add_executable(PongGame
     src/main.cpp 
     src/paddle.cpp
     src/point.cpp 
+    src/renderer.cpp
     src/scene.cpp
     src/sceneitem.cpp
 )

@@ -3,7 +3,7 @@
 
 using std::invalid_argument;
 using game::SceneItem;
-using game::Scene;
+using game::Renderer;
 using game::Point;
 using game::Dimension;
 
@@ -52,8 +52,8 @@ void SceneItem::update(long delta) {
     }
 }
 
-void SceneItem::render(Scene* scene) {
-    if (scene == nullptr) {
+void SceneItem::render(Renderer* renderer) {
+    if (renderer == nullptr) {
         throw invalid_argument("Cannot render a scene item with an invalid renderer.");
     }
 }

@@ -5,23 +5,24 @@
 #include "scene.h"
 #include "paddle.h"
 #include "ball.h"
+#include "renderer.h"
+#include "eventbus.h"
 
 namespace game {
     using game::Ball;
     using game::Paddle;
     using game::EventBus;
+    using game::Scene;
+    using game::Renderer;
 
     class CourtScene : public Scene {
         public:
-            CourtScene(EventBus* bus);
-            CourtScene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer);
+            CourtScene(Renderer* renderer, EventBus* bus);
             virtual ~CourtScene();
 
+            virtual void load();
+            virtual void unload();
             virtual void update(long delta);
-
-        protected:
-            virtual void loadItems();
-            virtual void unloadItems();
 
         private:
             Ball* _ball;

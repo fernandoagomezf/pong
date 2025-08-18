@@ -1,9 +1,15 @@
 #pragma once
 
+#include "scene.h"
+#include "inputhandler.h"
+#include "eventbus.h"
+#include "renderer.h"
+
 namespace game {
-    class Scene;
-    class InputHandler;
-    class EventBus;
+    using game::Scene;
+    using game::InputHandler;
+    using game::EventBus;
+    using game::Renderer;
 
     class GameApp {
         public:
@@ -11,14 +17,13 @@ namespace game {
             ~GameApp();
 
             void run();
-            
-        protected:
-            void handleEvents();
+            void quit();            
             
         private:
             Scene* _scene;
             EventBus* _bus;
             InputHandler* _handler;
+            Renderer* _renderer;
             bool _isRunning;
     };
 }

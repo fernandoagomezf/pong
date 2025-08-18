@@ -7,6 +7,8 @@
 #include "courtscene.h"
 #include "eventbus.h"
 #include "inputhandler.h"
+#include "renderer.h"
+#include <SDL2/SDL.h>
 
 using std::runtime_error;
 using std::string;
@@ -17,12 +19,14 @@ using game::Scene;
 using game::CourtScene;
 using game::InputHandler;
 using game::EventBus;
+using game::Renderer;
 
 GameApp::GameApp() {
     SDL_Init(SDL_INIT_VIDEO);
+    _renderer = new Renderer();
     _bus = new EventBus();
     _handler = new InputHandler(_bus);
-    _scene = new CourtScene(_bus);    
+    _scene = new CourtScene(_renderer, _bus);    
     _isRunning = true;
 }
 
@@ -30,11 +34,14 @@ GameApp::~GameApp() {
     delete _scene;
     delete _handler;
     delete _bus;
+    delete _renderer;
     SDL_Quit();
 }
 
 void GameApp::run() {
     uint32_t lastTicks = 0;
+
+    _renderer->create("Tollan Pong", Dimension(800, 600));
 
     _scene->load();
     while (_isRunning) {
@@ -42,7 +49,7 @@ void GameApp::run() {
         auto delta = currentTicks - lastTicks;
         lastTicks = currentTicks;
 
-        handleEvents();
+        _handler->dispatch();
         _scene->update(delta);
         _scene->render(); 
 
@@ -51,13 +58,6 @@ void GameApp::run() {
     _scene->unload();
 }
 
-void GameApp::handleEvents() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            _isRunning = false;
-        } else {
-            _handler->handle(event);
-        }
-    }
+void GameApp::quit() {
+    _isRunning = false;
 }

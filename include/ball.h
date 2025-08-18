@@ -1,15 +1,19 @@
 #pragma once
 
 #include "sceneitem.h"
+#include "renderer.h"
 
 namespace game {    
+    using game::SceneItem;
+    using game::Renderer;
+    
     class Ball : public SceneItem {
         public:
             Ball();
             virtual ~Ball();
 
             virtual void update(long delta);
-            virtual void render(Scene* scene);
+            virtual void render(Renderer* renderer);
 
             void reset();
             void reverseX();            

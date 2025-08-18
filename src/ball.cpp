@@ -6,7 +6,7 @@
 
 using std::invalid_argument;
 using game::Ball;
-using game::Scene;
+using game::Renderer;
 
 Ball::Ball()
     : SceneItem() {    
@@ -40,11 +40,11 @@ void Ball::update(long delta) {
     }
 }
 
-void Ball::render(Scene* scene) {
-    SceneItem::render(scene);
+void Ball::render(Renderer* renderer) {
+    SceneItem::render(renderer);
     auto pt = point();
     auto dim = dimension();
-    scene->draw(pt, dim, Color::white());
+    renderer->draw(pt, dim, Color::white());
 }
 
 void Ball::reset() {

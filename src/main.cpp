@@ -1,3 +1,4 @@
+#include <SDL2/SDL.h>
 #include "common.h"
 #include "gameapp.h"
 

@@ -1,19 +1,13 @@
 
 #include "common.h"
 #include "courtscene.h"
+#include <SDL2/SDL.h>
 
 using game::Scene;
 using game::CourtScene;
 
-CourtScene::CourtScene(EventBus* bus)
-    : Scene(bus) {
-    _ball = new Ball();
-    _playerPaddle = new Paddle();
-    _machinePaddle = new Paddle();
-}
-
-CourtScene::CourtScene(EventBus* bus, SDL_Window* window, SDL_Renderer* renderer)
-    : Scene(bus, window, renderer) {
+CourtScene::CourtScene(Renderer* renderer, EventBus* bus)
+    : Scene(renderer, bus) {
     _ball = new Ball();
     _playerPaddle = new Paddle();
     _machinePaddle = new Paddle();
@@ -25,7 +19,7 @@ CourtScene::~CourtScene() {
     delete _machinePaddle;
 }
 
-void CourtScene::loadItems() {
+void CourtScene::load() {
     _ball->reset();
     attach(_ball);
 
@@ -46,7 +40,7 @@ void CourtScene::loadItems() {
     });
 }
 
-void CourtScene::unloadItems() {
+void CourtScene::unload() {
     auto bus = getBus();
     bus->clear(Event::PADDLE_UP);
     bus->clear(Event::PADDLE_DOWN);

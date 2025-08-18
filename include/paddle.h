@@ -1,10 +1,11 @@
 #pragma once
 
 #include "sceneitem.h"
+#include "renderer.h"
 
 namespace game {
-    class Scene;
-    class SceneItem;
+    using game::SceneItem;
+    using game::Renderer;
 
     class Paddle : public SceneItem {
         public:
@@ -12,7 +13,7 @@ namespace game {
             virtual ~Paddle();
 
             virtual void update(long delta);
-            virtual void render(Scene* scene);
+            virtual void render(Renderer* renderer);
             void moveUp();
             void moveDown();
 

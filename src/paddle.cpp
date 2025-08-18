@@ -38,12 +38,12 @@ void Paddle::update(long delta) {
     moveTo(newpt);
 }
 
-void Paddle::render(Scene* scene) {
-    SceneItem::render(scene);
+void Paddle::render(Renderer* renderer) {
+    SceneItem::render(renderer);
     
     auto pt = point();
     auto dim = dimension();
-    scene->draw(pt, dim, Color::white());
+    renderer->draw(pt, dim, Color::white());
 }
 
 void Paddle::moveUp() {

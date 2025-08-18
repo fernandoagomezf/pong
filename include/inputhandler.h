@@ -6,14 +6,14 @@
 #include "eventbus.h"
 
 namespace game {
-    class EventBus;
+    using game::EventBus;
 
     class InputHandler {
         public:
             InputHandler(EventBus* bus);
             ~InputHandler();
 
-            void handle(const SDL_Event& event);
+            void dispatch();
 
         private:
             EventBus* _bus;
