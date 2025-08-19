@@ -84,7 +84,6 @@ void CourtScene::update(long delta) {
         _machinePaddle->moveUp();
     }
 
-
     if (SDL_HasIntersection(&ballRect, &playerRect) ||
         SDL_HasIntersection(&ballRect, &machineRect)) {
         _ball->reverseX();

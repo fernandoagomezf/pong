@@ -13,7 +13,7 @@ Ball::Ball()
     _velX = 3;
     _velY = 3;
     Dimension dim(15, 15);
-    resize(dim);
+    redim(dim);
 }
 
 Ball::~Ball() {

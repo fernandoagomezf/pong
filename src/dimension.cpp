@@ -1,8 +1,13 @@
+#include "common.h"
 #include "dimension.h"
 
+using std::invalid_argument;
 using game::Dimension;
 
 Dimension::Dimension(int width, int height) {
+    if (width < 0 || height < 0) {
+        throw invalid_argument("The dimensions cannot be negative.");
+    }
     _width = width;
     _height = height;
 }

@@ -5,12 +5,14 @@
 #include "updatable.h"
 #include "renderable.h"
 #include "renderer.h"
+#include "rectangle.h"
 
 namespace game {
     using game::Point;
     using game::Dimension;
     using game::Renderer;
     using game::Renderable;
+    using game::Rectangle;
 
     class SceneItem : public Updatable, public Renderable {
         public:
@@ -18,21 +20,18 @@ namespace game {
 
             Point point() const;
             Dimension dimension() const;
+            Rectangle rectangle() const;
             
             void moveTo(const Point& point);
-            void resize(const Dimension& dimension);
+            void redim(const Dimension& dimension);
             virtual void update(long delta);
             virtual void render(Renderer* renderer);         
 
         protected:
             SceneItem();
 
-            virtual bool isValidPoint(const Point& value);
-            virtual bool isValidDimension(const Dimension& value);
-
         private:
-            Point _point;
-            Dimension _dimension;
+            Rectangle _rectangle;
     };
 }
 

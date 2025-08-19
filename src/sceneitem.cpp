@@ -8,7 +8,7 @@ using game::Point;
 using game::Dimension;
 
 SceneItem::SceneItem()
-    : _point(0, 0), _dimension(0, 0) {    
+    : _rectangle(0, 0, 0, 0) {
     
 }
 
@@ -17,33 +17,21 @@ SceneItem::~SceneItem() {
 }
 
 Point SceneItem::point() const {
-    return _point;
+    return _rectangle.getOriginPoint();
 }
 
 Dimension SceneItem::dimension() const {
-    return _dimension;
+    return _rectangle.getDimension();
 }
 
 void SceneItem::moveTo(const Point& point) {
-    if (!isValidPoint(point)) {
-        throw invalid_argument("Cannot move to an invalid point.");
-    }
-    _point = point;
+    auto dim = _rectangle.getDimension();
+    _rectangle = Rectangle(point, dim);
 }
 
-void SceneItem::resize(const Dimension& dimension) {
-    if (!isValidDimension(dimension)) {
-        throw invalid_argument("Cannot resize to an invalid dimension.");
-    }
-    _dimension = dimension;
-}
-
-bool SceneItem::isValidPoint(const Point& value) {
-    return true; // any point is valid.
-}
-
-bool SceneItem::isValidDimension(const Dimension& value) {
-    return value.width() > 0 && value.height() > 0; //any dim is valid, just no negative values
+void SceneItem::redim(const Dimension& dimension) {    
+    auto pt = _rectangle.getOriginPoint();
+    _rectangle = Rectangle(pt, dimension);
 }
 
 void SceneItem::update(long delta) {

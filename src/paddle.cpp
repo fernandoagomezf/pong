@@ -13,7 +13,7 @@ using game::Point;
 Paddle::Paddle() {
     _speed = 5;
     Dimension dim(20, 100);
-    resize(dim);
+    redim(dim);
 }
 
 Paddle::~Paddle() {
