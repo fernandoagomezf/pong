@@ -28,6 +28,10 @@ GameApp::GameApp() {
     _handler = new InputHandler(_bus);
     _scene = new CourtScene(_renderer, _bus);    
     _isRunning = true;
+
+    _bus->subscribe(Event::QUIT_GAME, [this]() {
+        quit();
+    });
 }
 
 GameApp::~GameApp() {
