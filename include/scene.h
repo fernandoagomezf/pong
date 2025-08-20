@@ -1,37 +1,30 @@
 #pragma once
 
-#include "common.h"
-#include "updatable.h"
+#include <vector>
 #include "sceneitem.h"
 #include "eventbus.h"
 #include "renderer.h"
 
 namespace game {
-    using std::vector;
-    using game::EventBus;
-    using game::Renderer;
-
-    class Scene : public Updatable {
+    class Scene {
         public:
-            Scene(Renderer* renderer, EventBus* bus);
+            Scene(game::EventBus* bus);
             virtual ~Scene();
 
-            virtual void load();
-            virtual void unload();
+            virtual void load() = 0;
+            virtual void unload() = 0;
 
-            virtual void update(long delta);
-            void render();
+            virtual void update(float delta);
+            virtual void render(game::Renderer* renderer);
 
         protected:
-            void attach(SceneItem* item);
-            void detach(SceneItem* item);
+            void attach(game::SceneItem* item);
+            void detach(game::SceneItem* item);
 
-            EventBus* getBus() const;
-            Renderer* getRenderer() const;
+            game::EventBus* getBus() const;
 
         private:
-            vector<SceneItem*> _items;
-            EventBus* _bus;
-            Renderer* _renderer;
+            std::vector<game::SceneItem*> _items;
+            game::EventBus* _bus;
     };
 }

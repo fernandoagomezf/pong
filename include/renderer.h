@@ -1,33 +1,28 @@
 #pragma once
 
-#include "common.h"
-#include "dimension.h"
-#include "point.h"
+#include <memory>
+#include <string>
+#include "vector.h"
+#include "rectangle.h"
 #include "color.h"
 
 namespace game {
-    using std::unique_ptr;
-    using std::string;
-    using game::Color;
-    using game::Dimension;
-    using game::Point;
-
     class Renderer {        
         public:
             Renderer();
             ~Renderer();
 
-            void create(const string& title, const Dimension& dimension);
+            void create(const std::string& title, const Vector& size);
             bool isCreated() const;
             void clear();
             void show();
             
-            void draw(const Point& pt, const Dimension& dim, const Color& color);
+            void draw(const game::Rectangle& rectangle, const Color& color);
 
         private:
             void ensureCreated() const;
 
             struct Impl;
-            unique_ptr<Impl> _impl;
+            std::unique_ptr<Impl> _impl;
     };
 }

@@ -1,6 +1,6 @@
 
-#include "common.h"
 #include "color.h"
+#include <stdexcept>
 
 using std::invalid_argument;
 using game::Color;

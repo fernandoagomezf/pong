@@ -2,25 +2,24 @@
 
 #include "sceneitem.h"
 #include "renderer.h"
+#include "vector.h"
 
-namespace game {    
-    using game::SceneItem;
-    using game::Renderer;
-    
-    class Ball : public SceneItem {
+namespace game {
+    class Ball : public game::SceneItem {
         public:
             Ball();
             virtual ~Ball();
 
-            virtual void update(long delta);
-            virtual void render(Renderer* renderer);
+            virtual void update(float delta);
+            virtual void render(game::Renderer* renderer);
 
             void reset();
-            void reverseX();            
+            void reverseX();         
+            void reverseY();   
 
         private:
-            int _velX;
-            int _velY;
+            float _speed;
+            game::Vector _direction;
     };
 }
 

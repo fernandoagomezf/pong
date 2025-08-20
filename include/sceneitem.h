@@ -1,37 +1,29 @@
 #pragma once
 
-#include "point.h"
-#include "dimension.h"
-#include "updatable.h"
-#include "renderable.h"
+#include "vector.h"
 #include "renderer.h"
 #include "rectangle.h"
 
-namespace game {
-    using game::Point;
-    using game::Dimension;
-    using game::Renderer;
-    using game::Renderable;
-    using game::Rectangle;
-
-    class SceneItem : public Updatable, public Renderable {
+namespace game {    
+    class SceneItem {
         public:
             virtual ~SceneItem();
 
-            Point point() const;
-            Dimension dimension() const;
-            Rectangle rectangle() const;
+            game::Vector position() const;
+            game::Vector size() const;
+            game::Rectangle rectangle() const;
             
-            void moveTo(const Point& point);
-            void redim(const Dimension& dimension);
-            virtual void update(long delta);
-            virtual void render(Renderer* renderer);         
+            void resize(const game::Vector& newSize);
+            void moveTo(const game::Vector& newPosition);
+            virtual void update(float delta);
+            virtual void render(game::Renderer* renderer);         
 
         protected:
             SceneItem();
 
         private:
-            Rectangle _rectangle;
+            game::Vector _position;
+            game::Vector _size;
     };
 }
 

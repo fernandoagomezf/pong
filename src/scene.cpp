@@ -1,9 +1,8 @@
 
-#include "common.h"
+#include <algorithm>
+#include <stdexcept>
 #include "scene.h"
-#include "sceneitem.h"
 #include "event.h"
-#include "eventbus.h"
 
 using std::find;
 using std::invalid_argument;
@@ -12,14 +11,10 @@ using game::Scene;
 using game::Event;
 using game::EventBus;
 
-Scene::Scene(Renderer* renderer, EventBus* bus) {
-    if (renderer == nullptr) {
-        throw invalid_argument("A renderer is needed for the scene.");
-    }
+Scene::Scene(EventBus* bus) {
     if (bus == nullptr) {
         throw invalid_argument("An event bus is needed for the scene.");
     }
-    _renderer = renderer;
     _bus = bus;
 }
 
@@ -30,20 +25,8 @@ Scene::~Scene() {
     _items.clear();
 }
 
-Renderer* Scene::getRenderer() const {
-    return _renderer;
-}
-
 EventBus* Scene::getBus() const {
     return _bus;
-}
-
-void Scene::load() {
-
-}
-
-void Scene::unload() {
-    
 }
 
 void Scene::attach(SceneItem* item) {
@@ -60,19 +43,17 @@ void Scene::detach(SceneItem* item) {
     }
 }
 
-void Scene::update(long delta) {
+void Scene::update(float delta) {
     for (auto i : _items) {
         i->update(delta);
     }
 }
 
-void Scene::render(){
-    _renderer->clear();
-
+void Scene::render(Renderer* renderer){
+    renderer->clear();
     for (auto i : _items) {
-        i->render(_renderer);
+        i->render(renderer);
     }
-
-    _renderer->show();
+    renderer->show();
 }
 

@@ -1,63 +1,61 @@
-#include "common.h"
+
+#include <stdexcept>
 #include "paddle.h"
-#include "point.h"
-#include "dimension.h"
+#include "vector.h"
 #include "scene.h"
-#include "sceneitem.h"
 
 using std::invalid_argument;
 using game::Paddle;
-using game::Dimension;
-using game::Point;
+using game::Vector;
 
 Paddle::Paddle() {
     _speed = 5;
-    Dimension dim(20, 100);
-    redim(dim);
+    Vector size(20, 100);
+    resize(size);
 }
 
 Paddle::~Paddle() {
     
 }
 
-void Paddle::update(long delta) {
+void Paddle::update(float delta) {
     SceneItem::update(delta);
 
-    auto pt = point();
-    auto dim = dimension();
-    auto newx = pt.x();
-    auto newy = pt.y();
+    auto pos = position();
+    auto sze = size();
+    auto newx = pos.x();
+    auto newy = pos.y();
 
     if (newy < 0) { 
         newy = 0;
     }
-    if (newy > 600 - dim.height()) {
-        newy = 600 - dim.height();
+    if (newy > 600 - sze.y()) {
+        newy = 600 - sze.y();
     }
-    Point newpt(newx, newy);
+
+    Vector newpt(newx, newy);
     moveTo(newpt);
 }
 
 void Paddle::render(Renderer* renderer) {
     SceneItem::render(renderer);
     
-    auto pt = point();
-    auto dim = dimension();
-    renderer->draw(pt, dim, Color::white());
+    auto rect = rectangle();
+    renderer->draw(rect, Color::white());
 }
 
 void Paddle::moveUp() {
-    auto pt = point();
-    auto newx = pt.x();
-    auto newy = pt.y() - _speed;    
-    Point newpt(newx, newy);
+    auto pos = position();
+    auto newx = pos.x();
+    auto newy = pos.y() - _speed;    
+    Vector newpt(newx, newy);
     moveTo(newpt);
 }
 
 void Paddle::moveDown() {
-    auto pt = point();
-    auto newx = pt.x();
-    auto newy = pt.y() + _speed;    
-    Point newpt(newx, newy);
+    auto pos = position();
+    auto newx = pos.x();
+    auto newy = pos.y() + _speed;    
+    Vector newpt(newx, newy);
     moveTo(newpt);
 }

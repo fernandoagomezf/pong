@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "common.h"
 #include "scene.h"
 #include "paddle.h"
 #include "ball.h"
@@ -9,24 +8,18 @@
 #include "eventbus.h"
 
 namespace game {
-    using game::Ball;
-    using game::Paddle;
-    using game::EventBus;
-    using game::Scene;
-    using game::Renderer;
-
-    class CourtScene : public Scene {
+    class CourtScene : public game::Scene {
         public:
-            CourtScene(Renderer* renderer, EventBus* bus);
+            CourtScene(EventBus* bus);
             virtual ~CourtScene();
 
             virtual void load();
             virtual void unload();
-            virtual void update(long delta);
+            virtual void update(float delta);
 
         private:
-            Ball* _ball;
-            Paddle* _playerPaddle;
-            Paddle* _machinePaddle;
+            game::Ball* _ball;
+            game::Paddle* _playerPaddle;
+            game::Paddle* _machinePaddle;
     };
 }

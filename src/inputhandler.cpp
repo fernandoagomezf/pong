@@ -1,8 +1,9 @@
 
-#include "common.h"
-#include "inputhandler.h"
-#include "eventbus.h"
+#include <stdexcept>
 #include <SDL2/SDL.h>
+#include "inputhandler.h"
+#include "event.h"
+#include "eventbus.h"
 
 using std::invalid_argument;
 using game::Event;

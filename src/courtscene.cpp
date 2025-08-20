@@ -1,13 +1,15 @@
 
-#include "common.h"
 #include "courtscene.h"
-#include <SDL2/SDL.h>
 
 using game::Scene;
 using game::CourtScene;
+using game::EventBus;
+using game::Paddle;
+using game::Ball;
+using game::Vector;
 
-CourtScene::CourtScene(Renderer* renderer, EventBus* bus)
-    : Scene(renderer, bus) {
+CourtScene::CourtScene(EventBus* bus)
+    : Scene(bus) {
     _ball = new Ball();
     _playerPaddle = new Paddle();
     _machinePaddle = new Paddle();
@@ -23,11 +25,11 @@ void CourtScene::load() {
     _ball->reset();
     attach(_ball);
 
-    Point playerPaddlePt(50, 250);
+    Vector playerPaddlePt(50.f, 250.f);
     _playerPaddle->moveTo(playerPaddlePt);
     attach(_playerPaddle);
 
-    Point machinePaddlePt(750, 250);
+    Vector machinePaddlePt(750, 250);
     _machinePaddle->moveTo(machinePaddlePt);
     attach(_machinePaddle);
 
@@ -49,46 +51,23 @@ void CourtScene::unload() {
     detach(_machinePaddle);
 }
 
-void CourtScene::update(long delta) {
+void CourtScene::update(float delta) {
     Scene::update(delta);
 
-    auto ballPt = _ball->point();
-    auto ballDim = _ball->dimension();
-    auto machinePaddlePt = _machinePaddle->point();
-    auto machinePaddleDim = _machinePaddle->dimension();
-    auto playerPaddlePt = _playerPaddle->point();
-    auto playerPaddleDim = _playerPaddle->dimension();
+    auto ballRect = _ball->rectangle();
+    auto machineRect = _machinePaddle->rectangle();
+    auto playerRect = _playerPaddle->rectangle();
     
-    SDL_Rect ballRect = { 
-        ballPt.x(), 
-        ballPt.y(), 
-        ballDim.width(), 
-        ballDim.height() 
-    };
-    SDL_Rect machineRect = {
-        machinePaddlePt.x(), 
-        machinePaddlePt.y(), 
-        machinePaddleDim.width(), 
-        machinePaddleDim.height()
-    };
-    SDL_Rect playerRect = {
-        playerPaddlePt.x(), 
-        playerPaddlePt.y(), 
-        playerPaddleDim.width(),
-        playerPaddleDim.height()
-    };
-
-    if (machineRect.y + machineRect.h / 2 < ballPt.y()) {
+    if (machineRect.y() + machineRect.height() / 2 < ballRect.y()) {
         _machinePaddle->moveDown();
     } else {
         _machinePaddle->moveUp();
     }
 
-    if (SDL_HasIntersection(&ballRect, &playerRect) ||
-        SDL_HasIntersection(&ballRect, &machineRect)) {
+    if (ballRect.intersects(playerRect) || ballRect.intersects(machineRect)) {
         _ball->reverseX();
     }
-    if (ballPt.x() < 0 || ballPt.x() > 800) {
+    if (ballRect.x() < 0.0f || ballRect.x() > 800.0f) {
         _ball->reset();
     }
 }

@@ -1,14 +1,14 @@
-#include "common.h"
+#include <stdexcept>
 #include "sceneitem.h"
 
 using std::invalid_argument;
 using game::SceneItem;
 using game::Renderer;
-using game::Point;
-using game::Dimension;
+using game::Vector;
+using game::Rectangle;
 
 SceneItem::SceneItem()
-    : _rectangle(0, 0, 0, 0) {
+    : _position(0.f, 0.f), _size(0.f, 0.f) {
     
 }
 
@@ -16,25 +16,27 @@ SceneItem::~SceneItem() {
 
 }
 
-Point SceneItem::point() const {
-    return _rectangle.getOriginPoint();
+Vector SceneItem::position() const {
+    return _position;
 }
 
-Dimension SceneItem::dimension() const {
-    return _rectangle.getDimension();
+Vector SceneItem::size() const {
+    return _size;
 }
 
-void SceneItem::moveTo(const Point& point) {
-    auto dim = _rectangle.getDimension();
-    _rectangle = Rectangle(point, dim);
+Rectangle SceneItem::rectangle() const {
+    return Rectangle(_position, _size);
 }
 
-void SceneItem::redim(const Dimension& dimension) {    
-    auto pt = _rectangle.getOriginPoint();
-    _rectangle = Rectangle(pt, dimension);
+void SceneItem::moveTo(const Vector& newPosition) {
+    _position = newPosition;
 }
 
-void SceneItem::update(long delta) {
+void SceneItem::resize(const Vector& newSize) {    
+    _size = newSize;
+}
+
+void SceneItem::update(float delta) {
     if (delta < 0) {
         throw invalid_argument("The update delta for a scene item cannot be a negative number.");
     }

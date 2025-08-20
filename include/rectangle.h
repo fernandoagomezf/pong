@@ -1,28 +1,24 @@
 
 #pragma once
 
-#include "point.h"
-#include "dimension.h"
+#include "vector.h"
 
 namespace game {
-    using game::Point;
-    using game::Dimension;
-
     class Rectangle {
         public:
-            Rectangle(int x, int y, int width, int height);
-            Rectangle(const Point& point, const Dimension& dimension);
+            Rectangle(float x, float y, float width, float height);
+            Rectangle(const game::Vector& position, const game::Vector& size);
             Rectangle(const Rectangle& other);
             ~Rectangle();
 
-            int x() const;
-            int y() const;
-            int width() const;
-            int height() const;
+            float x() const;
+            float y() const;
+            float width() const;
+            float height() const;
 
-            Point getOriginPoint() const;
-            Point getEndPoint() const;
-            Dimension getDimension() const;
+            game::Vector originPosition() const;
+            game::Vector endPosition() const;
+            game::Vector size() const;
 
             bool intersects(const Rectangle& other) const;
 
@@ -31,9 +27,9 @@ namespace game {
             bool operator!= (const Rectangle& other) const;
 
         private:
-            int _x;
-            int _y;
-            int _width;
-            int _height;
+            float _x;
+            float _y;
+            float _width;
+            float _height;
     };
 }

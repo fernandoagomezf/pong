@@ -1,8 +1,8 @@
 
-#include "common.h"
 #include "event.h"
 #include "eventbus.h"
 
+using std::function;
 using game::Event;
 using game::EventBus;
 

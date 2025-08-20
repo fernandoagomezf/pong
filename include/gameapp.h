@@ -6,11 +6,6 @@
 #include "renderer.h"
 
 namespace game {
-    using game::Scene;
-    using game::InputHandler;
-    using game::EventBus;
-    using game::Renderer;
-
     class GameApp {
         public:
             GameApp();
@@ -20,10 +15,10 @@ namespace game {
             void quit();            
             
         private:
-            Scene* _scene;
-            EventBus* _bus;
-            InputHandler* _handler;
-            Renderer* _renderer;
+            game::Scene* _scene;
+            game::EventBus* _bus;
+            game::InputHandler* _handler;
+            game::Renderer* _renderer;
             bool _isRunning;
     };
 }

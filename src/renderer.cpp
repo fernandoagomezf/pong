@@ -1,12 +1,12 @@
 
-#include "renderer.h"
-#include "dimension.h"
 #include <SDL2/SDL.h>
+#include <stdexcept>
+#include "renderer.h"
 
 using std::make_unique;
 using std::string;
 using std::runtime_error;
-using game::Dimension;
+using game::Vector;
 using game::Renderer;
 
 struct Renderer::Impl {
@@ -26,13 +26,13 @@ bool Renderer::isCreated() const {
     return _impl->window != nullptr && _impl->renderer != nullptr;
 }
 
-void Renderer::create(const string& title, const Dimension& dimension){
+void Renderer::create(const string& title, const Vector& size){
     if (isCreated()) {
         throw runtime_error("The renderer has already been created.");
     }
     
-    auto width = dimension.width();
-    auto height = dimension.height();
+    auto width = static_cast<int>(size.x());
+    auto height = static_cast<int>(size.y());
     _impl->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     _impl->renderer = SDL_CreateRenderer(_impl->window, -1, SDL_RENDERER_ACCELERATED);
 }
@@ -49,9 +49,12 @@ void Renderer::clear() {
     SDL_RenderClear(_impl->renderer);
 }
 
-void Renderer::draw(const Point& pt, const Dimension& dim, const Color& color) {
+void Renderer::draw(const Rectangle& rectangle, const Color& color) {
     SDL_Rect rect = { 
-        pt.x(), pt.y(), dim.width(), dim.height()
+        static_cast<int>(rectangle.x()), 
+        static_cast<int>(rectangle.y()), 
+        static_cast<int>(rectangle.width()), 
+        static_cast<int>(rectangle.height())
     };
     SDL_SetRenderDrawColor(_impl->renderer, color.r(), color.g(), color.b(), color.a());
     SDL_RenderFillRect(_impl->renderer, &rect);

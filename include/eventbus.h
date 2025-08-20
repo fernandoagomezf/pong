@@ -1,25 +1,22 @@
 
 #pragma once
 
-#include "common.h"
 #include "event.h"
+#include <functional>
+#include <unordered_map>
+#include <vector>
 
-namespace game {
-    using std::function;
-    using std::vector;
-    using std::unordered_map;
-    using game::Event;
-    
+namespace game {    
     class EventBus {
         public:
             EventBus();
             ~EventBus();
 
-            void subscribe(Event event, function<void()> callback);
-            void clear(Event event);
-            void publish(Event event);
+            void subscribe(game::Event event, std::function<void()> callback);
+            void clear(game::Event event);
+            void publish(game::Event event);
 
         private:
-            unordered_map<Event, vector<function<void()>>> _subscribers;
+            std::unordered_map<game::Event, std::vector<std::function<void()>>> _subscribers;
     };
 }

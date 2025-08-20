@@ -1,17 +1,14 @@
 
-#include "common.h"
 #include "rectangle.h"
-#include "dimension.h"
-#include "point.h"
+#include <stdexcept>
 #include <SDL2/SDL.h>
 
 using std::invalid_argument;
 using game::Rectangle;
-using game::Dimension;
-using game::Point;
+using game::Vector;
 
-Rectangle::Rectangle(int x, int y, int width, int height) {
-    if (width < 0 || height < 0) {
+Rectangle::Rectangle(float x, float y, float width, float height) {
+    if (width < 0.0f || height < 0.0f) {
         throw invalid_argument("The dimensions cannot be negative.");
     }
     _x = x;
@@ -20,11 +17,11 @@ Rectangle::Rectangle(int x, int y, int width, int height) {
     _height = height;
 }
             
-Rectangle::Rectangle(const Point& point, const Dimension& dimension) {
-    _x = point.x();
-    _y = point.y();
-    _width = dimension.width();
-    _height = dimension.height();
+Rectangle::Rectangle(const Vector& position, const Vector& size) {
+    _x = position.x();
+    _y = position.y();
+    _width = size.x();
+    _height = size.y();
 }
 
 Rectangle::Rectangle(const Rectangle& other) {
@@ -38,46 +35,46 @@ Rectangle::~Rectangle() {
 
 }
 
-int Rectangle::x() const {
+float Rectangle::x() const {
     return _x;
 }
 
-int Rectangle::y() const {
+float Rectangle::y() const {
     return _y;
 }
 
-int Rectangle::width() const {
+float Rectangle::width() const {
     return _width;
 }
 
-int Rectangle::height() const {
+float Rectangle::height() const {
     return _height;
 }
 
-Point Rectangle::getOriginPoint() const {
-    return Point(_x, _y);
+Vector Rectangle::originPosition() const {
+    return Vector(_x, _y);
 }
 
-Point Rectangle::getEndPoint() const {
-    return Point(_x + _width, _y + _height);
+Vector Rectangle::endPosition() const {
+    return Vector(_x + _width, _y + _height);
 }
 
-Dimension Rectangle::getDimension() const {
-    return Dimension(_width, _height);
+Vector Rectangle::size() const {
+    return Vector(_width, _height);
 }
 
 bool Rectangle::intersects(const Rectangle& other) const {
     SDL_Rect thisRect {
-        _x, 
-        _y, 
-        _width, 
-        _height
+        static_cast<int>(_x), 
+        static_cast<int>(_y), 
+        static_cast<int>(_width),
+        static_cast<int>(_height)
     };
     SDL_Rect otherRect {
-        other._x, 
-        other._y, 
-        other._width, 
-        other._height
+        static_cast<int>(other._x), 
+        static_cast<int>(other._y), 
+        static_cast<int>(other._width), 
+        static_cast<int>(other._height)
     };
     
     auto result = SDL_HasIntersection(&thisRect, &otherRect);

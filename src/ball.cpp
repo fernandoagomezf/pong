@@ -1,8 +1,6 @@
 
-#include "common.h"
+#include <stdexcept>
 #include "ball.h"
-#include "scene.h"
-#include "sceneitem.h"
 
 using std::invalid_argument;
 using game::Ball;
@@ -10,10 +8,10 @@ using game::Renderer;
 
 Ball::Ball()
     : SceneItem() {    
-    _velX = 3;
-    _velY = 3;
-    Dimension dim(15, 15);
-    redim(dim);
+    _direction = Vector(1, 1).normalize();
+    _speed = 300;
+    Vector dim(15, 15);
+    resize(dim);
 }
 
 Ball::~Ball() {
@@ -21,34 +19,49 @@ Ball::~Ball() {
 }
 
 void Ball::reverseX() {
-    _velX *= -1;
+    //_xDir *= -1;
 }
 
-void Ball::update(long delta) {
+void Ball::reverseY() {
+    //_yDir *= -1;
+}
+
+void Ball::update(float delta) {
     SceneItem::update(delta);
 
-    auto pt = point();
-    auto dim = dimension();
-    auto xpt = pt.x() + _velX;
-    auto ypt = pt.y() + _velY;
+    float screenWidth = 800;
+    float screenHeight = 600;
+    Vector sze = size();
+    Vector movement = _direction.scale(_speed * delta);
+    Vector newPosition = position().add(movement);
 
-    Point newpt(xpt, ypt);
-    moveTo(newpt);
-    
-    if (newpt.y() < 0 || newpt.y() > 600 - dim.height()) {
-        _velY *= -1;
+    if (newPosition.x() < 0.f) {
+        newPosition = Vector(0.f, newPosition.y());
+        _direction = Vector(-_direction.x(), _direction.y());
+    } else if (newPosition.x() > screenWidth - sze.x()) {
+        newPosition = Vector(screenWidth - sze.x(), _direction.y());
+        _direction = Vector(-_direction.x(), _direction.y());
     }
+
+    if (newPosition.y() < 0.f) {
+        newPosition = Vector(newPosition.x(), 0.f);
+        _direction = Vector(_direction.x(), -_direction.y());
+    } else if (newPosition.y() > screenHeight - sze.y()) {
+        newPosition = Vector(newPosition.x(), screenHeight - sze.y());
+        _direction = Vector(_direction.x(), -_direction.y());
+    }
+
+    moveTo(newPosition);
 }
 
 void Ball::render(Renderer* renderer) {
     SceneItem::render(renderer);
-    auto pt = point();
-    auto dim = dimension();
-    renderer->draw(pt, dim, Color::white());
+    auto rect = rectangle();
+    renderer->draw(rect, Color::white());
 }
 
 void Ball::reset() {
-    Point opt(400, 300);
+    Vector opt(400, 300);
     moveTo(opt);
-    _velX *= -1;
+    reverseX();
 }
