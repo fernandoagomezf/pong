@@ -18,23 +18,26 @@ Ball::~Ball() {
     
 }
 
-void Ball::reverseX() {
-    //_xDir *= -1;
-}
-
-void Ball::reverseY() {
-    //_yDir *= -1;
+void Ball::bounce(bool horizontal, bool vertical) {
+    auto pos = position();
+    if (horizontal) {
+        _direction = Vector(-_direction.x(), _direction.y());
+    }
+    if (vertical) {
+        _direction = Vector(_direction.x(), -_direction.y());
+    }
 }
 
 void Ball::update(float delta) {
     SceneItem::update(delta);
 
-    float screenWidth = 800;
-    float screenHeight = 600;
-    Vector sze = size();
-    Vector movement = _direction.scale(_speed * delta);
-    Vector newPosition = position().add(movement);
+    /*auto screenWidth = 800.f;
+    auto screenHeight = 600.f;
+    auto sze = size();*/
+    auto movement = _direction.scale(_speed * delta);
+    auto newPosition = position().add(movement);
 
+    /*
     if (newPosition.x() < 0.f) {
         newPosition = Vector(0.f, newPosition.y());
         _direction = Vector(-_direction.x(), _direction.y());
@@ -50,6 +53,7 @@ void Ball::update(float delta) {
         newPosition = Vector(newPosition.x(), screenHeight - sze.y());
         _direction = Vector(_direction.x(), -_direction.y());
     }
+        */
 
     moveTo(newPosition);
 }
@@ -63,5 +67,5 @@ void Ball::render(Renderer* renderer) {
 void Ball::reset() {
     Vector opt(400, 300);
     moveTo(opt);
-    reverseX();
+    _direction = Vector(1, 1).normalize();
 }

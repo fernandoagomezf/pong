@@ -4,13 +4,13 @@
 #include "renderer.h"
 
 namespace game {
-    class Paddle : public game::SceneItem {
+    class Paddle : public SceneItem {
         public:
             Paddle();
             virtual ~Paddle();
 
             virtual void update(float delta);
-            virtual void render(game::Renderer* renderer);
+            virtual void render(Renderer* renderer);
             void moveUp();
             void moveDown();
 

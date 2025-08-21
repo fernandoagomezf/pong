@@ -7,7 +7,7 @@ namespace game {
     class Rectangle {
         public:
             Rectangle(float x, float y, float width, float height);
-            Rectangle(const game::Vector& position, const game::Vector& size);
+            Rectangle(const Vector& position, const Vector& size);
             Rectangle(const Rectangle& other);
             ~Rectangle();
 
@@ -16,9 +16,9 @@ namespace game {
             float width() const;
             float height() const;
 
-            game::Vector originPosition() const;
-            game::Vector endPosition() const;
-            game::Vector size() const;
+            Vector originPosition() const;
+            Vector endPosition() const;
+            Vector size() const;
 
             bool intersects(const Rectangle& other) const;
 

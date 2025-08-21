@@ -5,21 +5,19 @@
 #include "vector.h"
 
 namespace game {
-    class Ball : public game::SceneItem {
+    class Ball : public SceneItem {
         public:
             Ball();
             virtual ~Ball();
 
-            virtual void update(float delta);
-            virtual void render(game::Renderer* renderer);
+            virtual void update(float delta) override;
+            virtual void render(Renderer* renderer) override;
 
             void reset();
-            void reverseX();         
-            void reverseY();   
+            void bounce(bool horizontal, bool vertical);
 
-        private:
             float _speed;
-            game::Vector _direction;
+            Vector _direction;
     };
 }
 

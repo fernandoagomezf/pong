@@ -6,20 +6,27 @@
 #include "ball.h"
 #include "renderer.h"
 #include "eventbus.h"
+#include "boundarycollisionevent.h"
+#include "collisionevent.h"
+#include "paddlemovedevent.h"
 
 namespace game {
-    class CourtScene : public game::Scene {
+    class CourtScene : public Scene {
         public:
             CourtScene(EventBus* bus);
             virtual ~CourtScene();
 
-            virtual void load();
-            virtual void unload();
-            virtual void update(float delta);
+            virtual void load() override;
+            virtual void unload() override;
+            virtual void update(float delta) override;
 
-        private:
-            game::Ball* _ball;
-            game::Paddle* _playerPaddle;
-            game::Paddle* _machinePaddle;
+        private:            
+            void onPaddleMoved(const PaddleMovedEvent* event);
+            void onBallPaddleCollided(const CollisionEvent* event);
+            void onBallBoundaryCollided(const BoundaryCollisionEvent* event);
+            
+            Ball* _ball;
+            Paddle* _playerPaddle;
+            Paddle* _machinePaddle;
     };
 }

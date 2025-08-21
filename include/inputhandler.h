@@ -6,12 +6,12 @@
 namespace game {
     class InputHandler {
         public:
-            InputHandler(game::EventBus* bus);
+            InputHandler(EventBus* bus);
             ~InputHandler();
 
             void dispatch();
 
         private:
-            game::EventBus* _bus;
+            EventBus* _bus;
     };
 }

@@ -9,13 +9,13 @@ using std::runtime_error;
 using game::Vector;
 using game::Renderer;
 
-struct Renderer::Impl {
+struct Renderer::impl {
     SDL_Window* window;
     SDL_Renderer* renderer;
 };
 
 Renderer::Renderer() {
-    _impl = make_unique<Impl>();
+    _impl = make_unique<impl>();
 }
 
 Renderer::~Renderer() {

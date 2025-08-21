@@ -15,10 +15,10 @@ namespace game {
             void quit();            
             
         private:
-            game::Scene* _scene;
-            game::EventBus* _bus;
-            game::InputHandler* _handler;
-            game::Renderer* _renderer;
+            Scene* _scene;
+            EventBus* _bus;
+            InputHandler* _handler;
+            Renderer* _renderer;
             bool _isRunning;
     };
 }

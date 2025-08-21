@@ -1,10 +1,20 @@
 #pragma once
 
+#include <string>
+
 namespace game {    
-    enum class Event {
-        QUIT_GAME,
-        PADDLE_UP, 
-        PADDLE_DOWN, 
-        BALL_HIT
+    using std::string;
+    
+    class Event {
+        public:
+            virtual ~Event();
+
+            string type() const;
+        
+        protected:
+            Event();
+            Event(const Event& other);
+
+            Event& operator= (const Event& other);
     };
 }

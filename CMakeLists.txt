@@ -29,6 +29,8 @@ message(STATUS "SDL2_LIBRARIES: ${SDL2_LIBRARIES}")
  
 add_executable(PongGame
     src/ball.cpp
+    src/boundarycollisionevent.cpp
+    src/collisionevent.cpp
     src/color.cpp 
     src/courtscene.cpp
     src/event.cpp
@@ -37,12 +39,13 @@ add_executable(PongGame
     src/inputhandler.cpp
     src/main.cpp 
     src/paddle.cpp
+    src/paddlemovedevent.cpp
     src/rectangle.cpp
     src/renderer.cpp
     src/scene.cpp
     src/sceneitem.cpp
+    src/quitevent.cpp
     src/vector.cpp
-    src/wall.cpp
 )
 
 target_include_directories(PongGame PRIVATE

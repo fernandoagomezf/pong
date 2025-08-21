@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include "gameapp.h"
 #include "courtscene.h"
-#include "event.h"
+#include "quitevent.h"
 
 using std::min;
 using std::runtime_error;
@@ -15,7 +15,7 @@ using game::CourtScene;
 using game::InputHandler;
 using game::EventBus;
 using game::Renderer;
-using game::Event;
+using game::QuitEvent;
 using game::Vector;
 
 GameApp::GameApp() {
@@ -25,7 +25,7 @@ GameApp::GameApp() {
     _scene = new CourtScene(_bus);    
     _isRunning = true;
 
-    _bus->subscribe(Event::QUIT_GAME, [this]() {
+    _bus->subscribe<QuitEvent>([this](const Event*) {
         quit();
     });
 }

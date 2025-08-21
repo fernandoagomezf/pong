@@ -6,25 +6,27 @@
 #include "renderer.h"
 
 namespace game {
+    using std::vector;
+
     class Scene {
         public:
-            Scene(game::EventBus* bus);
+            Scene(EventBus* bus);
             virtual ~Scene();
 
             virtual void load() = 0;
             virtual void unload() = 0;
 
             virtual void update(float delta);
-            virtual void render(game::Renderer* renderer);
+            virtual void render(Renderer* renderer);
 
         protected:
-            void attach(game::SceneItem* item);
-            void detach(game::SceneItem* item);
+            void attach(SceneItem* item);
+            void detach(SceneItem* item);
 
-            game::EventBus* getBus() const;
+            EventBus* getBus() const;
 
         private:
-            std::vector<game::SceneItem*> _items;
-            game::EventBus* _bus;
+            vector<SceneItem*> _items;
+            EventBus* _bus;
     };
 }

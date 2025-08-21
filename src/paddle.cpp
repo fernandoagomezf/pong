@@ -26,12 +26,12 @@ void Paddle::update(float delta) {
     auto newx = pos.x();
     auto newy = pos.y();
 
-    if (newy < 0) { 
+    /*if (newy < 0) { 
         newy = 0;
     }
     if (newy > 600 - sze.y()) {
         newy = 600 - sze.y();
-    }
+    }*/
 
     Vector newpt(newx, newy);
     moveTo(newpt);
