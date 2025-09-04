@@ -3,7 +3,6 @@
 Una implementación del clásico juego de Pong en C++ utilizando la biblioteca SDL (Simple DirectMedia Layer). Este proyecto fue concebido como un ejericio para ir aprendiendo los fundamentos de desarrollo de videojuegos, incluyendo la representación gráfica (_graphic rendering_), detección de colisión, movimiento basado en vector de dirección y manejo de eventos. 
 
 ![C++](https://img.shields.io/badge/C++-20+-blue?logo=cplusplus)
-![SDL](https://img.shields.io/badge/SDL-2.0-orange?logo=libsdl)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
