@@ -1,5 +1,6 @@
+#include <iostream>
+#include <stdexcept>
 #include <SDL2/SDL.h>
-#include "common.h"
 #include "gameapp.h"
 
 using std::cout;
